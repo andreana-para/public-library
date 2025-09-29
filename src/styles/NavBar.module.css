@@ -1,0 +1,27 @@
+.navBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #fce3db;
+    height: 150px;
+    padding: 0 20px;
+    z-index: 1000;
+}
+
+.links {
+    display: flex;
+    gap: 1em;
+    
+}
+
+.light {
+    background-color: #ffffff;
+}
+
+.logo {
+    
+}
