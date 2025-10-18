@@ -7,20 +7,19 @@ const trimCollapse = (s) => String(s ?? "").trim().replace(/\s+/g, "");
 
 const initialValues = {
     name: "",
-    title: "",
     email: "",
-    bio: "",
     img: null,
 }
 
 
-
 const AddAccount = ({ addProfiles }) => {
     const [values, setValues] = useState(initialValues)
-    const {name, title, email, bio, img} = values;
+    const {name, email, img} = values;
     const [errors, setErrors] = useState("")
     const [isSubmitting, setSubmitting] = useState(false)
     const [success, setSuccess] = useState("")
+    const [submittedProfile, setSubmittedProfile] = useState(null);
+
 
     const navigate = useNavigate()
 
@@ -44,24 +43,29 @@ const AddAccount = ({ addProfiles }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log("submitting")
+        setSubmitting(true);
 
         setSubmitting(true);
         try {
             const cleanedValues = {
                 name: stripTags(trimCollapse(name)),
-                title: stripTags(trimCollapse(title)),
                 email: stripTags(trimCollapse(email)),
-                bio: stripTags(bio.trim()),
                 img: img ? URL.createObjectURL(img) : "",
             };
+            setSubmittedProfile(cleanedValues);
             addProfiles(cleanedValues);
+            
             setSuccess("Form has been submitted successfully.");
-            setValues(initialValues)
+            setValues(initialValues);
+
+            //event.currentTarget.reset();
+
             setTimeout(()=> {
                 setSuccess("");
             }, 1000)
-            event.currentTarget.reset();
-            navigate("/")
+            //event.currentTarget.reset();
+            //navigate("/")
         } catch(error) {
             setErrors("Something is wrong.")
         } finally {
@@ -73,31 +77,37 @@ const AddAccount = ({ addProfiles }) => {
 
     return (
         <div className={styles.addNewProfile}>
-            <h2>Don't have an account? Make one!</h2>
-            <form onSubmit={handleSubmit} className={styles.addProfileForm}>
-                <label htmlFor = "name">Name:</label>
-                <input type = "text" name = "name" id = "name" required value = {name} onChange = {onChange} />
-                <label htmlFor = "title">Title:</label>
-                <input type = "text" name = "title" id = "title" required value = {title} onChange = {onChange}/>
-                <label htmlFor = "email">Email:</label>
-                <input type = "text" name = "email" id = "email" required value = {email} onChange = {onChange}/>
-                <label htmlFor = "bio">Bio:</label>
-                <textarea name = "bio" id = "bio" placeholder = "Add bio..." required value = {bio} onChange = {onChange}></textarea>
-                <label htmlFor = "image">Image:</label>
-                <input type = "file" name = "image" id = "image" onChange = {onChange}/>
-                <br></br>
-                <button className = {styles.submitButton}
-                    type="submit" 
-                    disabled={isSubmitting || 
-                        !stripTags(trimCollapse(name)) || 
-                        !stripTags(trimCollapse(title)) ||
-                        !stripTags(trimCollapse(email)) ||
-                        !stripTags(bio).trim() ||
-                        !img
-                    }
-                    >Add Account</button>
-                {success && <p className="success">{success}</p>}
-            </form>
+            {!submittedProfile ? (
+                <>
+                    <h2>Don't have an account? Make one!</h2>
+                    <form onSubmit={handleSubmit} className={styles.addProfileForm}>
+                        <label htmlFor = "name">Name:</label>
+                        <input type = "text" name = "name" id = "name" required value = {name} onChange = {onChange} />
+                        <label htmlFor = "email">Email:</label>
+                        <input type = "text" name = "email" id = "email" required value = {email} onChange = {onChange}/>
+                        <label htmlFor = "image">Image:</label>
+                        <input type = "file" name = "image" id = "image" onChange = {onChange}/>
+                        <br></br>
+                        <button className = {styles.submitButton}
+                            type="submit" 
+                            disabled={isSubmitting || 
+                                !stripTags(trimCollapse(name)) || 
+                                !stripTags(trimCollapse(email)) ||
+                                !img
+                            }
+                            >Add Account</button>
+                        {success && <p className="success">{success}</p>}
+
+                    </form>
+                </>
+            ) : (
+                <div className={styles.profileDisplay}>
+                    <h2>Welcome, {submittedProfile.name}</h2>
+                    <img src={submittedProfile.img} className={styles.profileImage} />
+                    <p>Email: {submittedProfile.email}</p>
+                </div>
+            )}
+            
         </div>
     )
 }

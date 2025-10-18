@@ -1,0 +1,9 @@
+.bookImage {
+    height: 200px;
+    margin: 20px auto;
+    display: block;
+}
+
+.descriptionHolder {
+    padding-top: 150px;
+}
