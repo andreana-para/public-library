@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styles from '../styles/Account.module.css'
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { ProfileContext } from '../contexts/ProfileContexts';
 
 const stripTags = (s) => String(s ?? "").replace(/<\/?[^>]+./g, "");
 const trimCollapse = (s) => String(s ?? "").trim().replace(/\s+/g, "");
@@ -20,6 +22,7 @@ const AddAccount = ({ addProfiles }) => {
     const [success, setSuccess] = useState("")
     const [submittedProfile, setSubmittedProfile] = useState(null);
 
+    const { addProfile } = useContext(ProfileContext);
 
     const navigate = useNavigate()
 

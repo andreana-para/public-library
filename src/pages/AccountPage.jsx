@@ -1,10 +1,10 @@
 import AddAccount from '../components/AddAccount'
 
-const AccountPage = ({addProfiles}) => {
+const AccountPage = () => {
     return (
         <>
         <h1>Account Page</h1>
-        <AddAccount addProfiles={addProfiles}/>
+        <AddAccount />
         </>
         
     )
